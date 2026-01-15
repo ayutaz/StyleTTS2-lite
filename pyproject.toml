@@ -37,6 +37,13 @@ onnx = [
     "onnx>=1.18.0",
     "onnxruntime>=1.22.0",
 ]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
 
 [tool.uv.sources]
 monotonic-align = { git = "https://github.com/resemble-ai/monotonic_align.git" }
