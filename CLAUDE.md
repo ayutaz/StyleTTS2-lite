@@ -23,11 +23,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 依存パッケージのインストール
 uv sync --extra demo --extra onnx
 
+# 開発用依存（pytest等）
+uv sync --extra dev
+
 # 学習の実行
 python train.py -p Configs/config.yaml
 
 # 推論（デモ）
 uv run Demo/infer.py
+
+# テスト実行
+uv run pytest
 
 # ONNX変換
 uv run ONNX/export_onnx.py
@@ -40,7 +46,7 @@ uv run ONNX/export_onnx.py
 ```
 テキスト入力
     ↓
-[G2P変換] テキスト → 音素列（独自実装予定）
+[G2P変換] テキスト → 音素列（実装済み）
     ↓
 [TextEncoder] Embedding → 1D Conv → BiLSTM (5.6M params)
     ↓
@@ -64,6 +70,7 @@ uv run ONNX/export_onnx.py
 | `losses.py` | 損失関数（MultiResolutionSTFTLoss等） |
 | `Modules/` | Decoder実装（istftnet, hifigan, vocos） |
 | `ONNX/` | ONNX変換・推論コード |
+| `tests/` | pytestテストスイート |
 
 ### 設定ファイル（Configs/config_example.yaml）
 

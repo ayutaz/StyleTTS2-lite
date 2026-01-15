@@ -171,21 +171,25 @@ cleaner = TextCleaner(symbol_dict, debug=True)
 ids = cleaner(ipa)
 ```
 
-### 6.2 inference.pyへの統合（予定）
+### 6.2 inference.pyへの統合（実装完了）
+
+`inference.py`にG2Pパイプラインが統合済み：
 
 ```python
 from g2p import G2PPipeline
 
 class StyleTTS2:
     def __init__(self, config_path, models_path):
-        # G2Pパイプライン追加
+        # G2Pパイプライン
         self.g2p = G2PPipeline()
 
-    def generate(self, text, style, ...):
-        # テキスト→IPA変換
-        phonemes = self.g2p.convert(text)
-        # 以降は既存の処理
+    def generate_from_text(self, text, style, stabilize=True, n_merge=16, language=None):
+        """テキストから直接音声生成（G2P統合版）"""
+        phonemes = self.g2p.convert(text, language=language)
+        return self.generate(phonemes, style, stabilize, n_merge)
 ```
+
+既存の`generate()`は音素入力のまま維持（後方互換性）。
 
 ## 7. 注意事項
 
@@ -214,6 +218,7 @@ symbol:
 - [x] 日本語G2P（pyopenjtalk-plus）
 - [x] 英語G2P（CMU辞書）
 - [x] 動作テスト
-- [ ] inference.pyへの統合
+- [x] inference.pyへの統合
+- [x] pytestテストスイート（34テスト）
 - [ ] 日本語学習データの作成
 - [ ] 日本語モデルの学習
