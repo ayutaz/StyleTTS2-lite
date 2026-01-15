@@ -24,7 +24,8 @@
 - [x] 日本語G2Pの実装（pyopenjtalk-plus）
 - [x] G2PPipeline統合（言語判定・混在対応）
 - [x] inference.pyへのG2P統合
-- [x] pytestテストスイート（34テスト）
+- [x] pytestテストスイート（92テスト）
+- [x] プロジェクトリファクタリング（Demo/infer.pyのG2P移行、__init__.py整備）
 
 ### Phase 2（4〜8週）: 学習パイプライン構築
 - StyleTTS2‑lite をベースに改造
