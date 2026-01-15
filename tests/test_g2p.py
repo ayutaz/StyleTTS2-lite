@@ -16,6 +16,13 @@ class TestG2PPipeline:
         """Test basic Japanese text conversion."""
         result = pipeline.convert("こんにちは")
         assert "k" in result
+        # N before 'n' becomes N_n -> 'n' (alveolar nasal)
+        assert "n" in result
+
+    def test_japanese_n_uvular(self, pipeline):
+        """Test Japanese text with uvular N (word-final)."""
+        result = pipeline.convert("にほん")
+        # Word-final N becomes N_uvular -> 'ɴ' (uvular nasal)
         assert "ɴ" in result
 
     def test_english_basic(self, pipeline):

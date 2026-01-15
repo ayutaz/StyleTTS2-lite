@@ -17,6 +17,7 @@ dependencies = [
     "pydub>=0.25.1",
     "pyopenjtalk-plus>=0.4.1.post7",
     "pyyaml>=6.0.2",
+    "setuptools>=80.7.1",
     "soundfile>=0.13.1",
     "torch>=2.7.0",
     "torchaudio>=2.7.0",
