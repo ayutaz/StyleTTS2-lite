@@ -12,6 +12,7 @@ import nltk
 nltk.download('punkt_tab')
 
 from models import ProsodyPredictor, TextEncoder, StyleEncoder
+from g2p import G2PPipeline
 
 class Preprocess:
     def __text_normalize(self, text):
@@ -89,6 +90,7 @@ class StyleTTS2(torch.nn.Module):
         args['n_token'] = n_token
         
         self.cleaner = TextCleaner(symbol_dict, debug=False)
+        self.g2p = G2PPipeline()
 
         assert args.decoder.type in ['istftnet', 'hifigan', 'vocos'], 'Decoder type unknown'
     
@@ -317,3 +319,19 @@ class StyleTTS2(torch.nn.Module):
         final_wav = np.concatenate(list_wav)
         final_wav = np.concatenate([np.zeros([4000]), final_wav, np.zeros([4000])], axis=0) # add padding
         return final_wav
+
+    def generate_from_text(self, text, style, stabilize=True, n_merge=16, language=None):
+        """Generate audio from raw text (with automatic G2P conversion).
+
+        Args:
+            text: Input text (Japanese, English, or mixed)
+            style: Style dictionary from get_styles()
+            stabilize: Whether to stabilize speaking speed between splits
+            n_merge: Minimum words per sentence fragment
+            language: Force language ('ja', 'en', or None for auto-detect)
+
+        Returns:
+            numpy array of audio samples
+        """
+        phonemes = self.g2p.convert(text, language=language)
+        return self.generate(phonemes, style, stabilize, n_merge)
