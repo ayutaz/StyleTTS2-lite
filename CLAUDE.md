@@ -84,20 +84,44 @@ libriTTS/train/1.wav|ðə kæt sæt ɑn ðə mæt
 - サンプリング: 24kHz
 - メルスペクトログラム: n_fft=2048, hop=300, n_mels=80
 
-## G2P実装計画（docs/g2p_implementation_guide.md参照）
+## G2P実装（実装完了）
 
-### 採用技術
-- 日本語: pyopenjtalk-plus（MIT/BSD）
-- 英語: CMU辞書 + ルールベースフォールバック（Public Domain）
+日英G2P（Grapheme-to-Phoneme）パイプラインを実装済み。GPL/AGPL依存なし。
 
-### 実装予定構成
+### 使用方法
+
+```python
+from g2p import G2PPipeline
+
+pipeline = G2PPipeline()
+
+# 日本語
+pipeline.convert("こんにちは")  # -> "k o ɴ n i ʧ i w ɑ"
+
+# 英語
+pipeline.convert("Hello world")  # -> "hʌloʊ wɚld"
+
+# 混在（自動言語判定）
+pipeline.convert("Hello、こんにちは")  # -> "hʌloʊ , k o ɴ n i ʧ i w ɑ"
+```
+
+### ファイル構成
+
 ```
 g2p/
-├── __init__.py           # G2PPipeline（統合API）
-├── phoneme_set.py        # config連携シンボルセット
-├── japanese/g2p.py       # pyopenjtalk → IPA変換
-└── english/g2p.py        # CMU辞書 + ARPABET → IPA変換
+├── __init__.py           # G2PPipeline（統合API・言語判定）
+├── japanese/
+│   ├── g2p.py            # JapaneseG2P（pyopenjtalk-plus）
+│   └── converter.py      # pyopenjtalk → IPA変換マッピング
+└── english/
+    ├── g2p.py            # EnglishG2P（ARPABET → IPA）
+    ├── cmu_dict.py       # CMU辞書ローダー（NLTK）
+    └── fallback.py       # ルールベースフォールバック
 ```
+
+### ライセンス
+- 日本語: pyopenjtalk-plus（MIT/BSD）
+- 英語: CMU辞書（Public Domain）+ NLTK（Apache 2.0）
 
 ## ドキュメント（docs/）
 
