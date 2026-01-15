@@ -102,14 +102,17 @@ from g2p import G2PPipeline
 
 pipeline = G2PPipeline()
 
-# 日本語
-pipeline.convert("こんにちは")  # -> "k o ɴ n i ʧ i w ɑ"
+# 日本語（N変異体適用: Nがnの前でN_n→nに変化）
+pipeline.convert("こんにちは")  # -> "k o n n i ʧ i w ɑ"
+
+# 語末のN（N_uvular→ɴ）
+pipeline.convert("にほん")  # -> "n i h o ɴ"
 
 # 英語
 pipeline.convert("Hello world")  # -> "hʌloʊ wɚld"
 
 # 混在（自動言語判定）
-pipeline.convert("Hello、こんにちは")  # -> "hʌloʊ , k o ɴ n i ʧ i w ɑ"
+pipeline.convert("Hello、こんにちは")  # -> "hʌloʊ , k o n n i ʧ i w ɑ"
 ```
 
 ### ファイル構成
